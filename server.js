@@ -51,34 +51,62 @@ const io = new Server(httpServer, {
   },
 });
 let activeUsers = [];
+// add new user to socket
+const addusers = (username, socket) => {
+  !activeUsers.some((user) =>user.username === username) && activeUsers.push({username, socketId})
+}
+// remove users 
+const removeUser = (socketId) => {
+  activeUsers = activeUsers.filter((user) => user .socketId !== socket.id)
+}
+
+// get single user
+const getUser = (username) => {
+  return activeUsers.find((user) => user.username === username)
+}
 
 const users = {};
 io.on("connection", (socket) => {
-  socket.on("setup", (userData) => {
-    socket.join(userData._id);
-    io.emit("get-user");
-    console.log("iiii");
-  });
+  console.log("connected to socket.io");
+  
+  // socket.on("setup", (userData) => {
+  //   socket.join(userData._id);
+  //   io.emit("get-user");
+  // });
 
-  socket.on("join-chat", (room) => {
-    socket.join(room);
+  // socket.on("join-chat", (room) => {
+  //   socket.join(room);
 
-    console.log("user join", room);
-  });
-  // typing animation
-  socket.on("typing", (room) => {
-    console.log(room);
-   socket.broadcast.emit("typing");
-  });
-  socket.on("stop typing", (room) => {
-    io.emit("stop typing")
-    console.log(room)
-  });
+  //   console.log("user join", room);
+  // });
+  // // typing animation
+  // socket.on("typing", (room) => {
+  //   console.log(room);
+  //  socket.broadcast.emit("typing");
+  // });
+  // socket.on("stop typing", (room) => {
+  //   io.emit("stop typing")
+  //   console.log(room)
+  // });
+  socket.on("addUser", (username) => {
+    addusers(username, socket.id)
+  })
   socket.on("send-message", ({ data, id }) => {
     console.log(data.senderId === id);
 
     io.to(data.receiverId).emit("message-received", data);
   });
+  console.log(activeUsers)
+  
+
+
+  socket.on("disconnect", () => {
+    removeUser(socket.id)
+    console.log("user disconnected")
+})
+
+
+
 
   // comment
   socket.on("add comment", (data) => {

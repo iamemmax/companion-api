@@ -15,7 +15,7 @@ const {
 const { ensureLogin } = require("../../helper/ensureLogin");
 const upload = require("../../helper/upload");
 
-router.post("/", ensureLogin, createNewChat);
+router.post("/",  createNewChat);
 router.post("/img", ensureLogin, upload.single("file"), sendImg);
 router.post("/audio", ensureLogin, sendVoiceRecord);
 router.post("/message", ensureLogin, sendMessage);
