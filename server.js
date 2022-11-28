@@ -52,20 +52,19 @@ const io = new Server(httpServer, {
 });
 let activeUsers = [];
 // add new user to socket
-const addusers = (username, socket) => {
-  !activeUsers.some((user) =>user.username === username) && activeUsers.push({username, socketId})
+const addusers = (username, userId, socketId) => {
+  !activeUsers.some((user) =>user.username === username) && activeUsers.push({username, userId, socketId})
 }
 // remove users 
-const removeUser = (socketId) => {
-  activeUsers = activeUsers.filter((user) => user .socketId !== socket.id)
+const removeUser = (socket) => {
+  activeUsers = activeUsers.filter((user) => user.socketId !== socket.id)
 }
 
 // get single user
-const getUser = (username) => {
-  return activeUsers.find((user) => user.username === username)
+const getUser = (userId) => {
+   return activeUsers.find((user) => user?.userId === userId)
 }
 
-const users = {};
 io.on("connection", (socket) => {
   console.log("connected to socket.io");
   
@@ -88,15 +87,26 @@ io.on("connection", (socket) => {
   //   io.emit("stop typing")
   //   console.log(room)
   // });
-  socket.on("addUser", (username) => {
-    addusers(username, socket.id)
+  socket.on("addUser", (data) => {
+    const { _id, username } = data
+    console.log(data._id, username)
+    addusers(username, _id, socket.id)
+    socket.emit("onlineUser", activeUsers)
   })
-  socket.on("send-message", ({ data, id }) => {
-    console.log(data.senderId === id);
+// join chat
+  socket.on("joinChat", (room) => {
+    console.log("user join room", room)
+  })
 
-    io.to(data.receiverId).emit("message-received", data);
+
+  socket.on("send-message", (data) => {
+
+    const user =  getUser(data.receiverId)
+    console.log(user, "users")
+    socket.broadcast.emit("message-received", data);
   });
   console.log(activeUsers)
+  
   
 
 
