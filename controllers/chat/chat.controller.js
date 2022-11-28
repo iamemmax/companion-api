@@ -185,7 +185,8 @@ exports.sendImg = asyncHandler(async (req, res) => {
   const { chatId, senderId, receiverId } = req.body;
 
   try {
-    let uploadImg = await cloudinary.uploader.upload(req.file.path, {
+       compressImg(req?.file?.path, 100, 100);
+    let uploadImg = await cloudinary.uploader.upload(req?.file?.path, {
       eager: [{ width: 150, height: 150 }],
     });
     console.log(uploadImg);

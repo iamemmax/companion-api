@@ -78,15 +78,15 @@ io.on("connection", (socket) => {
 
   //   console.log("user join", room);
   // });
-  // // typing animation
-  // socket.on("typing", (room) => {
-  //   console.log(room);
-  //  socket.broadcast.emit("typing");
-  // });
-  // socket.on("stop typing", (room) => {
-  //   io.emit("stop typing")
-  //   console.log(room)
-  // });
+  // typing animation
+  socket.on("typing", (room) => {
+    console.log(room);
+   socket.broadcast.emit("typing");
+  });
+  socket.on("stop typing", (room) => {
+    io.emit("stop typing")
+    console.log(room)
+  });
   socket.on("addUser", (data) => {
     const { _id, username } = data
     console.log(data._id, username)
