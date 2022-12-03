@@ -47,7 +47,7 @@ httpServer.listen(PORT, () => {
 });
 const io = new Server(httpServer, {
   cors: {
-    origin: "*",
+    origin: "https://e-companion.vercel.app",
   },
 });
 let activeUsers = [];
