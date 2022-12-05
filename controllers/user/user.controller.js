@@ -116,7 +116,7 @@ exports.createUser = asyncHandler(async (req, res) => {
               { id: data._id },
               process.env.JWT_SECRETE,
               {
-                expiresIn: "12hr",
+                expiresIn: "30d",
               }
             );
             sendEmail(
@@ -258,7 +258,7 @@ exports.loginUser = asyncHandler(async (req, res) => {
 
       if (isMatch) {
         const userToken = jwt.sign({ id: user._id }, process.env.JWT_SECRETE, {
-          expiresIn: "12hr",
+          expiresIn: "30d",
         });
         return res.status(201).json({
           res: "ok",
