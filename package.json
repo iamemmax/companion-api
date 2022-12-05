@@ -5,6 +5,7 @@
   "main": "server.js",
   "author": "emmax",
   "license": "MIT",
+
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js"
