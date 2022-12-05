@@ -255,9 +255,9 @@ exports.getMessage = asyncHandler(async (req, res) => {
   const { chatId } = req.params;
   try {
     const getMsg = await messageSchema
-      .find({ chatId })
+      .find({chatId: [new mongoose.Types.ObjectId(chatId)] })
       .populate("senderId", "-password -__v -token");
-    console.log(getMsg);
+   
     return res.status(201).json({
       res: "ok",
       chat: getMsg,
