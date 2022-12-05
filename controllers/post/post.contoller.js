@@ -41,8 +41,12 @@ exports.createPost = asyncHandler(async (req, res) => {
         };
         fileArray.push(postImgs);
 
+        
         fs.unlinkSync(element.path);
+      
       }
+      
+     
 
       const newPost = new postSchema({
         description,

@@ -73,6 +73,7 @@ const postSchema = mongoose.Schema({
         required: true,
     },
     img: [],
+    video:{},
 
 
     author: {

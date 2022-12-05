@@ -51,6 +51,7 @@ const io = new Server(httpServer, {
   },
 });
 let activeUsers = [];
+
 // add new user to socket
 const addusers = (username, userId, socketId) => {
   !activeUsers.some((user) =>user.username === username) && activeUsers.push({username, userId, socketId})
@@ -66,27 +67,12 @@ const getUser = (userId) => {
 }
 
 io.on("connection", (socket) => {
-  console.log("connected to socket.io");
+  // console.log("connected to socket.io");
   
-  // socket.on("setup", (userData) => {
-  //   socket.join(userData._id);
-  //   io.emit("get-user");
-  // });
-
-  // socket.on("join-chat", (room) => {
-  //   socket.join(room);
-
-  //   console.log("user join", room);
-  // });
+  
   // typing animation
-  socket.on("typing", (room) => {
-    console.log(room);
-   socket.broadcast.emit("typing");
-  });
-  socket.on("stop typing", (room) => {
-    io.emit("stop typing")
-    console.log(room)
-  });
+  socket.on("typing", (room) => io.to(room).emit("typing"));
+  socket.on("stop typing", (room) =>  io.to(room).emit("stop typing"));
   socket.on("addUser", (data) => {
     const { _id, username } = data
     console.log(data._id, username)
@@ -105,10 +91,14 @@ io.on("connection", (socket) => {
     console.log(user, "users")
     socket.broadcast.emit("message-received", data);
   });
-  console.log(activeUsers)
+  // console.log(activeUsers)
   
   
-
+// post
+// send notification to post owner
+  socket.on("likePost", (data) => {
+  // io.to
+})
 
   socket.on("disconnect", () => {
     removeUser(socket.id)
@@ -124,30 +114,25 @@ io.on("connection", (socket) => {
   });
 
   socket.on("add reply", (data) => {
-    console.log(data);
+    // console.log(data);
     io.emit("get reply", data);
   });
 
-  // vedio call implementation
-  // socket.on("myId", ())
-  // io.emit("me", socket.id);
-  socket.on("myId", (data) => {
-    io.emit("me", data);
-  });
+  
 
-  socket.on("disconnect", (data) => {
-    socket.broadcast.emit("callEnded");
-  });
-  socket.on("callUser", (data) => {
-    io.to(data.userToCall).emit("callUser", {
-      signal: data.signalData,
-      from: data.from,
-      name: data.name,
+
+  socket.emit('me', socket.id);
+    // console.log(socket.id);
+
+    socket.on('disconnect', (socket) => {
+        console.log(socket);
     });
-    console.log(data.userToCall);
-  });
 
-  socket.on("answerCall", (data) => {
-    io.to(data.to).emit("callAccepted", data.signal);
-  });
+    socket.on('calluser', ({ userToCall, signalData, from, name }) => {
+        io.to(userToCall).emit('calluser', { signal: signalData, from, name })
+    });
+
+    socket.on('answercall', (data) => {
+        io.to(data.to).emit('callaccepted', data.signal);
+    });
 });
