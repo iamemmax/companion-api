@@ -860,7 +860,7 @@ exports.myFollow = asyncHandler(async (req, res) => {
 // @Method:get
 // @Routes:http://localhost:3000/api/user/following
 exports.findLove = asyncHandler(async (req, res) => {
-  let { gender, from, to, city } = req.query;
+  let { gender, from, to, country, state, city } = req.query;
   const page = Number(req.query.pageNumber) || 1;
   const pageSize = 20; // total number of entries on a single page
   console.log(typeof from);
@@ -870,6 +870,8 @@ exports.findLove = asyncHandler(async (req, res) => {
         $and: [
           {
             age: { $gte: from, $lte: to },
+            country,
+            state,
             city,
             gender,
           },
