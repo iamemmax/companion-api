@@ -33,7 +33,7 @@ router.get("/logout", logoutUser);
 router.get("/:id", getUserById);
 router.put("/verify/:id", verifyUser);
 router.put("/reset-password/:id", resetPassword);
-router.put("/update-profile/:id", ensureLogin, updateProfile);
+router.put("/update-profile/:id", updateProfile);
 router.put(
   "/update/profile-img",
   ensureLogin,
