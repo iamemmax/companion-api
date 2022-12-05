@@ -60,6 +60,7 @@ const addusers = (username, userId, socketId) => {
 // remove users 
 const removeUser = (socket) => {
   activeUsers = activeUsers.filter((user) => user.socketId !== socket.id)
+  console.log("123")
 }
 
 // get single user
