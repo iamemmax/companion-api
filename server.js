@@ -22,7 +22,7 @@ const app = express();
 app.use(cors({ credentials: true }));
 app.use(logger("dev"));
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static("/tmp"));
+// app.use(express.static(""));
 app.use(express.json());
 
 //routes
