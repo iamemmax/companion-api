@@ -5,8 +5,9 @@
   "main": "server.js",
   "author": "emmax",
   "license": "MIT",
-  
-
+  "engines": {
+    "node": "18.12.1"
+  },
 
   "scripts": {
     "start": "node server.js",
