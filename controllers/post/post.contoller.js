@@ -758,9 +758,7 @@ exports.createVideoPost = asyncHandler(async (req, res) => {
         }
        } )
 
-      
-      
-     console.log("12345")
+
 
     }
   } catch (error) {
