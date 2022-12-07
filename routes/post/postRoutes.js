@@ -10,15 +10,18 @@ const {
   likePost,
   disLikePost,
   listAllUsersPost,
-  getTimelinePost
+  getTimelinePost,
+  createVideoPost
 } = require("../../controllers/post/post.contoller");
 const { ensureLogin } = require("../../helper/ensureLogin");
 const upload = require("../../helper/upload");
+const uploadVideo = require("../../helper/videoUpload");
 
 // router.get("/q?search", ensureLogin, filterPost)
 router.get("/", ensureLogin, listAllPost);
 router.get("/mypost/:id", ensureLogin, listAllUsersPost);
 router.post("/new", upload.array("img", 6), createPost);
+router.post("/video/new", uploadVideo.single("video"), createVideoPost);
 router.put("/like/:id", ensureLogin, likePost);
 router.put("/dislike/:id", ensureLogin, disLikePost);
 router.put("/:id", ensureLogin, updatePost);

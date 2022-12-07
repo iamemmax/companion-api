@@ -5,6 +5,7 @@ const postSchema = require("../../model/post/post.schema");
 const { validatePostSchema } = require("../../validation/post/post.validate");
 const mongoose = require("mongoose");
 const fs = require("fs");
+const crypto = require("crypto");
 
 // @Desc:create post
 // @Method:post
@@ -675,4 +676,100 @@ exports.listAllUsersPost = asyncHandler(async (req, res) => {
       msg: error.message,
     });
   }
+});
+
+// @Desc:create post with videos
+// @Method:post
+// @Routes:http://localhost:3000/api/post/video/new
+exports.createVideoPost = asyncHandler(async (req, res) => {
+  const { path } = req.file;
+  console.log("123456", path)
+ 
+         const { error, value } = validatePostSchema.validate(req.body, {
+    abortEarly: false,
+  });
+  const fileArray = [];
+       
+   
+  
+  if (error) {
+    return res.status(404).json({
+      res: "fail",
+      msg: error.details.map((error) => error.message).join(","),
+    });
+  }
+
+  try {
+    if (value) {
+      let { description, visibility, userId, author } = value;
+     
+      crypto.randomBytes(5, async (err, buffer) => {
+    let token = buffer.toString("hex");
+    if (err) console.log(err);
+    
+   
+
+         const uploadVideo = await cloudinary.uploader.upload(
+      req.file.path, {
+        resource_type: "video",
+         public_id: `essential_video_${token}`,
+        chunk_size: 6000000,
+        eager: [
+          { width: 300, height: 300, crop: "pad", audio_codec: "none" }, 
+          { width: 160, height: 100, crop: "crop", gravity: "south", audio_codec: "none" } ],                                   
+          eager_async: true,
+        }
+        
+        // public_id: "/public/",
+        
+        
+        ) 
+        let postVideo = {
+          video_id: uploadVideo.public_id,
+          video: uploadVideo.secure_url,
+        };
+        fileArray.push(postVideo);
+
+        
+        fs.unlinkSync(req.file.path);
+        
+        if (postVideo) {
+          
+          const newPost = new postSchema({
+            description,
+            visibility,
+            userId:  new mongoose.Types.ObjectId(userId),
+            author:  new mongoose.Types.ObjectId(author),
+            video: fileArray,
+          });
+          const savedPost = await newPost.save();
+          if (savedPost) {
+            return res.status(200).json({
+              res: "ok",
+              msg: "post created successfully",
+              data: savedPost,
+            });
+          } else {
+            return res.status(404).json({
+              res: "fail",
+              msg: "unable to create post",
+            });
+          }
+        }
+       } )
+
+      
+      
+     
+
+    }
+  } catch (error) {
+    return res.status(400).json({
+      res: "fail",
+      msg: error.message,
+    });
+  }
+
+  
+ 
 });

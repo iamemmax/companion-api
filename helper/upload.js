@@ -17,7 +17,7 @@ const upload = multer({
     storage: storage,
 
     fileFilter: (req, file, cb) => {
-        if (file.mimetype.startsWith("image")) {
+        if (file.mimetype.startsWith("image" && "video")) {
             cb(null, true);
         } else {
             cb(null, false);
