@@ -121,7 +121,10 @@ io.on("connection", (socket) => {
   });
 
   
-
+  io.on("patnerId", (id) => {
+  const patnerId = getUser(id)
+  io.emit("getPatner", patnerId)
+})
 
   socket.emit('me', socket.id);
     // console.log(socket.id);
