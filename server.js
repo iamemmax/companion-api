@@ -91,7 +91,7 @@ io.on("connection", (socket) => {
 
     const user =  getUser(data.receiverId)
     console.log(user, "users")
-    socket.broadcast.emit("message-received", data);
+    io.emit("message-received", data);
   });
   // console.log(activeUsers)
   
