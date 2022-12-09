@@ -93,7 +93,7 @@ io.on("connection", (socket) => {
     console.log(user, "users")
     io.emit("message-received", data);
   });
-  // console.log(activeUsers)
+  console.log(activeUsers)
   
   
 // post
