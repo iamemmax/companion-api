@@ -121,9 +121,9 @@ io.on("connection", (socket) => {
   });
 
   
-  io.on("patnerId", (id) => {
+  socket.on("patnerId", (id) => {
   const patnerId = getUser(id)
-  io.emit("getPatner", patnerId)
+  socket.to(patnerId?.socketId).emit("getPatner", patnerId)
 })
 
   socket.emit('me', socket.id);
