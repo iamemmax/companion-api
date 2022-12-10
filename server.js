@@ -124,7 +124,7 @@ io.on("connection", (socket) => {
   
   socket.on("patnerId", (id) => {
   const patnerId = getUser(id)
-  socket.to(patnerId?.socketId).emit("getPatner", patnerId)
+  io.emit("getPatner", patnerId)
 })
 
   socket.emit('me', socket.id);
