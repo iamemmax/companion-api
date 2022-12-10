@@ -128,7 +128,7 @@ io.on("connection", (socket) => {
 })
 
   socket.emit('me', socket.id);
-    // console.log(socket.id);
+    console.log(socket.id);
 
  
     socket.on('calluser', ({ userToCall, signalData, from, name }) => {
