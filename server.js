@@ -105,6 +105,7 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     removeUser(socket.id)
     console.log("user disconnected")
+    socket.broadcast.emit("callEnded")
 })
 
 
@@ -129,15 +130,13 @@ io.on("connection", (socket) => {
   socket.emit('me', socket.id);
     // console.log(socket.id);
 
-    socket.on('disconnect', (socket) => {
-        console.log(socket);
-    });
-
+ 
     socket.on('calluser', ({ userToCall, signalData, from, name }) => {
         io.to(userToCall).emit('calluser', { signal: signalData, from, name })
     });
 
     socket.on('answercall', (data) => {
         io.to(data.to).emit('callaccepted', data.signal);
-    });
+    })
+  
 });
