@@ -221,7 +221,7 @@ exports.sendImg = asyncHandler(async (req, res) => {
 exports.sendVoiceRecord = asyncHandler(async (req, res) => {
   //compressImg(req.file.path, 150, 150);
   const { chatId, senderId, receiverId, audio } = req.body;
-console.log("123")
+
   try {
    
     const audiorecord = await new messageSchema({
