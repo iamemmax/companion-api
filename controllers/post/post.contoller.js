@@ -520,20 +520,20 @@ exports.listAllRely = asyncHandler(async (req, res) => {
 // @Method:put
 exports.likePost = asyncHandler(async (req, res) => {
   let saveLike;
-  const { id } = req.params;
+  const { id , userId} = req.params;
   try {
     const { likes } = await postSchema.findOne({ _id: id });
 
-    if (likes.find((x) => x.likeBy.toString() === req.user._id.toString())) {
+    if (likes.find((x) => x.likeBy.toString() === userId)) {
       saveLike = await postSchema.findOneAndUpdate(
         { _id: id },
-        { $pull: { likes: { likeBy: req.user._id } } },
+        { $pull: { likes: { likeBy: userId } } },
         { new: true, upsert: true }
       );
     } else {
       saveLike = await postSchema.findOneAndUpdate(
         { _id: id },
-        { $push: { likes: { likeBy: req.user._id } } },
+        { $push: { likes: { likeBy: userId} } },
         { new: true, upsert: true }
       );
     }
@@ -561,35 +561,35 @@ exports.likePost = asyncHandler(async (req, res) => {
 // @Method:put
 exports.disLikePost = asyncHandler(async (req, res) => {
   let saveLike;
-  const { id } = req.params;
+  const { id , userId} = req.params;
   try {
     const { disLikes, likes } = await postSchema.findOne({ _id: id });
 
-    if (likes.find((x) => x.likeBy.toString() === req.user._id.toString())) {
+    if (likes.find((x) => x.likeBy.toString() === userId)) {
       saveLike = await postSchema.findOneAndUpdate(
         { _id: id },
-        { $pull: { likes: { likeBy: req.user._id } } },
+        { $pull: { likes: { likeBy:userId} } },
         { new: true, upsert: true }
       );
     }
 
     if (
-      disLikes.find((x) => x.dislikeBy.toString() === req.user._id.toString())
+      disLikes.find((x) => x.dislikeBy.toString() ===userId)
     ) {
       saveLike = await postSchema.findOneAndUpdate(
         { _id: id },
-        { $pull: { disLikes: { dislikeBy: req.user._id } } },
+        { $pull: { disLikes: { dislikeBy:userId} } },
         { new: true, upsert: true }
       );
     } else {
       saveLike = await postSchema.findOneAndUpdate(
         { _id: id },
-        { $push: { disLikes: { dislikeBy: req.user._id } } },
+        { $push: { disLikes: { dislikeBy:userId} } },
         { new: true, upsert: true }
       );
     }
 
-    console.log();
+
 
     if (saveLike) {
       return res.status(201).json({
