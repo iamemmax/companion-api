@@ -121,6 +121,12 @@ io.on("connection", (socket) => {
     io.emit("get reply", data);
   });
 
+  socket.on("createNewPost", (data) => {
+      io.emit("getPosts", data);
+  })
+  socket.on("addLikePost", (data) => {
+      io.emit("getLikes", data);
+  })
   
   socket.on("patnerId", (id) => {
   const patnerId = getUser(id)
