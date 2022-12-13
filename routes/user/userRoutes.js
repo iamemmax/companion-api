@@ -35,12 +35,12 @@ router.put("/verify/:id", verifyUser);
 router.put("/reset-password/:id", resetPassword);
 router.put("/update-profile/:id", updateProfile);
 router.put(
-  "/update/profile-img",
+  "/update/profile-img/:id",
   
   upload.single("avater"),
   uploadProfile
 );
-router.put("/change-password", ensureLogin, ChangePassword);
+router.put("/change-password/:id", ensureLogin, ChangePassword);
 router.put("/follow/:id/:currentUserId", ensureLogin, followUser);
 router.put("/unfollow/:id/:currentUserId", ensureLogin, unfollowUser)
 router.get("/follows", ensureLogin, myFollow);

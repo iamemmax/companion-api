@@ -544,8 +544,9 @@ exports.uploadProfile = asyncHandler(async (req, res) => {
   //   });
   // }
 
-  let user = req.user;
-  const users = await userSchema.findOne({ _id: user._id });
+  // let user = req.user;
+  const {id} = req.params
+  const users = await userSchema.findOne({ _id: id });
   //  if(users.pic.length > 0){
   //  }
   try {
@@ -564,7 +565,7 @@ exports.uploadProfile = asyncHandler(async (req, res) => {
       };
       let updateProfile = await userSchema
         .findOneAndUpdate(
-          { _id: user._id },
+          { _id: id },
           {
             $set: {
               avater: {
@@ -664,9 +665,9 @@ exports.ChangePassword = asyncHandler(async (req, res) => {
     });
   }
   try {
-    const user = req.user;
+   const {id} = req.params
     const users = await userSchema
-      .findOne({ _id: user._id })
+      .findOne({ _id: id })
       .select("password _id");
     const { password, oldpassword } = value;
     bcrypt.compare(oldpassword, users.password, (err, isMatch) => {
