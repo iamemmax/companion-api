@@ -166,7 +166,7 @@ exports.verifyUser = asyncHandler(async (req, res) => {
       msg: error.details.map((error) => error.message).join(","),
     });
   }
-
+console.log("12456")
   try {
     //check if email is already registered
     const userFound = await userSchema.findById(req.params.id);
