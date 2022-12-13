@@ -36,7 +36,7 @@ router.put("/reset-password/:id", resetPassword);
 router.put("/update-profile/:id", updateProfile);
 router.put(
   "/update/profile-img",
-  ensureLogin,
+  
   upload.single("avater"),
   uploadProfile
 );
