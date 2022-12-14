@@ -16,6 +16,8 @@ const {
   myFollowers,
   myFollow,
   findLove,
+  searchCountry,
+  searchCountryStateCity
 } = require("../../controllers/user/user.controller");
 const { ensureLogin } = require("../../helper/ensureLogin");
 const upload = require("../../helper/upload");
@@ -23,6 +25,8 @@ const upload = require("../../helper/upload");
 const router = require("express").Router();
 
 router.get("/", ensureLogin, listUsers);
+router.get("/:country",  searchCountry);
+router.get("/:country/:state/:city",  searchCountryStateCity);
 router.get("/followers", ensureLogin, myFollowers);
 router.get("/me", ensureLogin, getMe);
 router.get("/forget-password", forgetPassword);

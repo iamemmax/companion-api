@@ -898,3 +898,70 @@ exports.findLove = asyncHandler(async (req, res) => {
     throw new Error(error.message);
   }
 });
+
+// @Desc:update search users by country
+// @Method:get
+// @Routes:http://localhost:3000/api/user/update-profile
+
+exports.searchCountry = asyncHandler(async (req, res) => {
+  const page = Number(req.query.pageNumber) || 1;
+  const pageSize = 20; // total number of entries on a single page
+let {country} = req.params
+
+  try {
+    let users = await userSchema
+      .find({country})
+      
+      .select("-password -token -__v")
+      .limit(pageSize)
+      .skip(pageSize * (page - 1))
+      .sort("-createdAt");
+
+    return res.status(201).json({
+      res: "ok",
+      total: users.length,
+      pages: Math.ceil(users.length / pageSize),
+      data: users,
+    });
+  } catch (error) {
+    if (error) {
+      return res.status(400).json({
+        res: "fail",
+        msg: error.message,
+      });
+    }
+  }
+});
+// @Desc:update search users by country
+// @Method:get
+// @Routes:http://localhost:3000/api/user/update-profile
+
+exports.searchCountryStateCity = asyncHandler(async (req, res) => {
+  const page = Number(req.query.pageNumber) || 1;
+  const pageSize = 20; // total number of entries on a single page
+let {country, state, city} = req.params
+
+  try {
+    let users = await userSchema
+      .find({country, state, city})
+      
+      .select("-password -token -__v")
+      .limit(pageSize)
+      .skip(pageSize * (page - 1))
+      .sort("-createdAt");
+
+    return res.status(201).json({
+      res: "ok",
+      total: users.length,
+      pages: Math.ceil(users.length / pageSize),
+      data: users,
+    });
+  } catch (error) {
+    if (error) {
+      return res.status(400).json({
+        res: "fail",
+        msg: error.message,
+      });
+    }
+  }
+});
